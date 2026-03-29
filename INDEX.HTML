@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नायरा कलेक्शन - स्टॉक कॅटलॉग (SET 01-53)</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #fff; margin: 0; padding: 0; }
+        .header { background: #880e4f; color: white; padding: 15px; text-align: center; font-size: 24px; position: sticky; top: 0; z-index: 100; font-weight: bold; }
+        .search-area { padding: 15px; text-align: center; background: #f8f8f8; border-bottom: 1px solid #ddd; }
+        #search { width: 85%; max-width: 450px; padding: 10px 20px; border: 2px solid #880e4f; border-radius: 25px; font-size: 16px; outline: none; }
+        .grid { display: flex; flex-wrap: wrap; justify-content: center; padding: 10px; }
+        .card { background: white; border: 1px solid #eee; border-radius: 12px; margin: 15px; width: 320px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+        .card img { width: 100%; height: 450px; object-fit: cover; display: block; background: #f0f0f0; }
+        .info { padding: 15px; text-align: left; }
+        .code { font-size: 22px; font-weight: bold; color: #880e4f; margin-bottom: 5px; }
+        .details { font-size: 14px; color: #333; margin-bottom: 8px; line-height: 1.4; }
+        .feature-box { background: #fce4ec; padding: 10px; border-radius: 8px; font-size: 13px; color: #555; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="header">नायरा कलेक्शन</div>
+
+<div class="search-area">
+    <input type="text" id="search" placeholder="ड्रेस नंबर शोधा (उदा. SET-040)..." onkeyup="searchFn()">
+</div>
+
+<div class="grid" id="mainGrid"></div>
+
+<script>
+    const inventory = [
+        {c: "SET-001", r: "गडद गुलाबी (Magenta)", d: "पिंटक्स आणि एम्ब्रॉयडरी", f: "गळ्यावर उभ्या पिंटक्स (Pin-tucks) रांगा आणि 'V' नेकवर एम्ब्रॉयडरी. खालच्या बाजूला पांढरे फ्लोरल फूल.", id: "105gKq_58T2KyCzU5Sh09BegUitFqpxW3"},
+        {c: "SET-002", r: "स्काय ब्लू (Sky Blue)", d: "फ्लोरल आणि लेस वर्क", f: "फिकट निळ्या रंगावर गुलाबी फुलांची प्रिंट आणि पांढरी नाजूक लेस (Lace) बॉर्डर.", id: "1oukjbly54KTvSWqFnmeBhD-8g0n_wF1t"},
+        {c: "SET-003", r: "निळा (Blue/Indigo)", d: "व्हाईट बर्ड/फ्लोरल प्रिंट", f: "स्लिव्हलेस (Sleeveless) ड्रेस असून त्यावर पांढऱ्या रंगाची नाजूक पक्षी किंवा फुलांची प्रिंट.", id: "1ySuYMG_oroGEsuLDYuGJ1a6t-dNtDg7Z"},
+        {c: "SET-004", r: "फिकट गुलाबी/तपकिरी", d: "अ‍ॅबस्ट्रॅक्ट आणि फ्लोरल आर्ट", f: "मोठ्या पानांची आणि फुलांची आर्टिस्टिक प्रिंट आणि नाजूक एम्ब्रॉयडरी आउटलाईन.", id: "1woRlCdNHndwaprTpufL7l9fQ3dWhl8v2"},
+        {c: "SET-005", r: "मस्टर्ड येलो", d: "कोयरी (Paisley) प्रिंट", f: "सेल्फ-कलर कोयरी प्रिंट आणि गळ्यावर पांढऱ्या मण्यांचे (Beads) लांब एम्ब्रॉयडरी वर्क.", id: "1B4Kg8L6GMVO63JYzr0ZuwduI5TOkFunl"},
+        { c: "SET-006 ", r: "केशरी (Orange/Rust)", d: "एम्ब्रॉयडरी आणि टॅसल वर्क", f: "V' आकाराच्या गळ्यावर आरसा (Mirror) आणि फुलांचे एम्ब्रॉयडरी वर्क आहे. गळ्याच्या खाली एक दोरी असून त्याला सुंदर पांढरे टॅसल्स (Tassels) जोडलेले आहेत.", id: "1c2mvUrhXt2woCeibqYpy5J5TbrKe8Tqj" },
+        {c: "SET-007", r: "तपकिरी/रस्ट (Rust Brown)", d: "पिंटक्स आणि टॅसल वर्क", f: "गळ्यावर पिंटक्स रांगा, बटणे, टॅसल्स आणि खालच्या बाजूला मोठे फ्लोरल एम्ब्रॉयडरी.", id: "12fdUsmzJTKkN-AuOJodQjr8JPIu1G2Yd"},
+        {c: "SET-008", r: "फिकट गुलाबी/क्रिम", d: "फ्लोरल प्रिंट आणि मणी वर्क", f: "जांभळ्या रंगाची मोठी फुले आणि गळ्यावर पांढऱ्या मण्यांचे (Beads) बारीक काम.", id: "1QPaFe5gX7LlScCmzpHH_vQnXguoDSWef"},
+        {c: "SET-009", r: "गुलाबी आणि पांढरा", d: "उभ्या पट्ट्यांची प्रिंट", f: "शर्ट स्टाईल ड्रेस, समोरच्या बाजूला वरपासून खालपर्यंत बटणे आणि छोटी कॉलर.", id: "1323lFdJ-EFP7Y1-qLJW8WFVfAP12Cx39"},
+        {c: "SET-010", r: "फिकट तपकिरी", d: "विणलेली नक्षी", f: "कोयरी आणि फुलांची विणलेली नक्षी. गळ्यावर निळी आणि पांढरी एम्ब्रॉयडरी बॉर्डर.", id: "19GSf0t4Ficq4QBO7fLNzpyFQFN-pq9ed"},
+        {c: "SET-011", r: "गुलाबी (Pink)", d: "तिरकी फ्लोरल आणि स्ट्रीप्स", f: "एका बाजूला उभ्या पट्ट्या आणि दुसऱ्या बाजूला फुलांची मोठी प्रिंट. V-नेक.", id: "1GlezQSsf686FxR5R1PyBcYJF8vlFOgQK"},
+        {c: "SET-012", r: "सी-ग्रीन (Sea Green)", d: "तिरकी फ्लोरल आणि स्ट्रीप्स", f: "SET-011 सारखीच पण सी-ग्रीन रंगातील डिझाइन. V-नेक बॉर्डरवर बारीक काम.", id: "1ACjfZZOsvUuRy_8Xm_VFRFgbpAIu_Ga1"},
+        {c: "SET-013", r: "लाल (Red)", d: "काफ्तान स्टाईल (Kaftan)", f: "कोयरी आणि भौमितिक एम्ब्रॉयडरी वर्क व बाजूला पांढऱ्या मण्यांची नाजूक लटकन बॉर्डर.", id: "1mA4PY0Tf8cRDF2U3PJUgLGQAdkT2UMd5"},
+        {c: "SET-014", r: "मॅरून/डस्टी पिंक", d: "मोठी फ्लोरल एम्ब्रॉयडरी", f: "गळ्याला सोनेरी गोटा-पट्टी आणि समोर हाताने केलेले ३D मणी वर्क असलेले मोठे फूल.", id: "1a_7Z5NZJiSq5zYV1rvLUoN5hRQ012gCi"},
+        {c: "SET-015", r: "फिकट गुलाबी/पीच", d: "ऑल-ओव्हर फ्लोरल नक्षी", f: "पांढऱ्या रंगाची नाजूक फुलांची नक्षी आणि खालच्या बॉर्डरला नक्षीदार कट-वर्क.", id: "1GML7hapJP9L1dq-Y1dPoLknq_ogGxZ5V"},
+        {c: "SET-016", r: "फिकट हिरवा (Lime Green)", d: "आधुनिक फ्लोरल आर्ट", f: "पांढऱ्या रंगाची मोठी फुले आणि उभ्या पट्ट्यांची आधुनिक प्रिंट. गोल गळा.", id: "198fcM87Nd8XikQHAlnXsqdFhcBmeSHjU"},
+        {c: "SET-017", r: "मॅजेंटा/गडद गुलाबी", d: "मिरर आणि एम्ब्रॉयडरी वर्क", f: "मध्यभागी चार मोठी वर्तुळाकार मिरर वर्क असलेली फुले आणि बाह्यांवर मॅचिंग वर्क.", id: "1GYejilHMn_gSStRghVPUjiWMCfxlsdCd"},
+        {c: "SET-018", r: "ऑलिव्ह ग्रीन (Olive Green)", d: "फ्लोरल आणि बर्ड एम्ब्रॉयडरी", f: "गुलाबी फुलांचे आणि पक्ष्यांचे (Birds) अतिशय नाजूक एम्ब्रॉयडरी वर्क.", id: "1N9Ym9BDWT_X5Txf4nLYeK4PpjE56C9bH"},
+        {c: "SET-019", r: "आकाशी निळा (Sky Blue)", d: "व्हाईट आऊटलाईन फ्लोरल", f: "पांढऱ्या नाजूक ठिपक्यांची प्रिंट आणि फुलांची पांढरी आऊटलाईन डिझाइन.", id: "1v_SP1d8fBzOjEkHLbb9xLytL7aVBy2AD"},
+        {c: "SET-020", r: "सी-ग्रीन / रामा ग्रीन", d: "फ्लोरल आणि भौमितिक प्रिंट", f: "पांढऱ्या आणि पिवळ्या रंगाची नाजूक प्रिंट व पिवळ्या रंगाचे एम्ब्रॉयडरी पॅचेस.", id: "1NKrfXht3j4gUFfwYPItxyr_-5IiOqW-q"},
+        {c: "SET-021", r: "रामा ग्रीन / फिकट निळा", d: "शर्ट स्टाईल कुर्ती", f: "समोर लाकडी नक्षीची बटणे आणि पांढऱ्या रंगाची नाजूक लीफ (Leaf) प्रिंट.", id: "1ZV3mrNSbcf5mjhc7n74NRuhmnFDHF7Jm"},
+        {c: "SET-022", r: "आकाशी निळा (Sky Blue)", d: "व्हाईट फ्लोरल आणि कोयरी", f: "पांढऱ्या रंगाची संपूर्ण अंगावर दाट नक्षी आणि गळ्यावर झिग-झॅग नक्षीदार बॉर्डर.", id: "1UW-WEyZmFbUD96Ym0dEM2Wd8sBO-A4us"},
+        {c: "SET-023", r: "गडद हिरवा (Dark Green)", d: "चेक्स आणि योक डिझाइन", f: "योकवर पिंटक्स, बारीक चेक्स आणि समोरच्या बाजूला टिकल्यांचे (Sequins) हलके काम.", id: "1BgIEIraEdr1I1Q8tLYy8_QTzn_3toh5D"},
+        {c: "SET-024", r: "काळा (Black)", d: "राजस्थानी/अजरख प्रिंट", f: "पांढरी छोटी बुट्टी, अजरख बॉर्डर आणि गळ्याला दोन छोटे पांढरे टॅसल्स.", id: "1rWdQ15tgNPbaytK2-lhDpiagwEy-jhYY"},
+        {c: "SET-025", r: "जांभळा / लॅव्हेंडर", d: "फ्लोरल आऊटलाईन प्रिंट", f: "मोठी फुले आणि पानांची आऊटलाईन डिझाइन. SET-019 सारखीच मॉडर्न डिझाइन.", id: "1APnUepoCznGPoYSumlWrQt1sQx0P9H2n"},
+        {c: "SET-026", r: "राखाडी (Grey)", d: "मल्टी-कलर फ्लोरल प्रिंट", f: "गुलाबी, केशरी आणि फिकट निळ्या फुलांची आधुनिक आणि आर्टिस्टिक नक्षी.", id: "1YfMED10gEh6W3NzZy2ApJQAHfDEcFn61"},
+        {c: "SET-027", r: "पांढरा (White)", d: "फ्लोरल एम्ब्रॉयडरी पॅटर्न", f: "फ्लेअर्ड ड्रेस, गळ्यावर आणि खालच्या बाजूला चक्राकार फुलांची गडद एम्ब्रॉयडरी.", id: "1Y2hX7KYWhCgftBk4BGxSV1NmC1R9eLRZ"},
+        {c: "SET-028", r: "मोहरीचा पिवळा", d: "मोठी फ्लोरल आर्ट (Self-tone)", f: "सेल्फ-टोन मोठी फुले आणि पानांवर बारीक टिकल्यांचे (Sequins) नाजूक काम.", id: "1ReFDdBojYvFUPDRUXT7wFr4DXj8GFw9U"},
+        {c: "SET-029", r: "मॅजेंटा / गडद गुलाबी", d: "मिरर आणि हेवी गोल्डन", f: "अनारकली स्टाईल, सोन्याच्या जरीचे दाट नक्षीकाम, आरसे आणि सुंदर गोंडे.", id: "1VY7wcZs9MUVToSF71s5JzwJ2tK7UUilj"},
+        {c: "SET-30", r: "बेज / क्रीम (Beige / Cream)", d: "निळा फ्लोरल ब्लॉक प्रिंट", f: "खांद्यावर निळे एम्ब्रॉयडरी पॅच वर्क आणि संपूर्ण कुर्त्यावर निळी ब्लॉक प्रिंट.", id: "1BWzPe2grZBqO6ru9dch0Hxd--Zxa8mn4"},
+        {c: "SET-31", r: "बदामी / बेज (Beige)", d: "पांढऱ्या धाग्यांचे मोत्यांचे काम", f: "गळ्याभोवती मोत्यांची माळ आणि पांढऱ्या फुलांचे मोठे एम्ब्रॉयडरी बुट्टे.", id: "1q85zkzfEb4guGVIWRBcKNt9mbcW1ZEbb"},
+        {c: "SET-32", r: "फिकट राखाडी / सिल्व्हर", d: "मोर आणि फुलांचे जड भरतकाम", f: "गळ्यावर गुलाबी फुलासह मोराचे सुबक एम्ब्रॉयडरी आणि चकाकणारे सिक्विन वर्क.", id: "1H0b8DMR2eSgSizkqQYPOaBZwklQvlQV5"},
+        {c: "SET-33", r: "गडद गुलाबी / रानी रंग", d: "पांढऱ्या धाग्यांचे भरतकाम", f: "गळ्याभोवती, बाह्यांवर आणि कडांवर पांढऱ्या फुलांचे सुंदर एम्ब्रॉयडरी वर्क.", id: "1xeXOOcalYy5d7bqEkZg2Z3r6Ra37gcMC"},
+        {c: "SET-34", r: "ऑलिव्ह ग्रीन", d: "आरसा आणि धाग्यांचे भरतकाम", f: "गळ्याभोवती आरशांचे गोलाकार डिझाईन आणि कुर्त्यावर नाजूक पांढरे बुट्टे.", id: "1tf6Mh3FFOfAtjorntjC-_j2J5s9__cQu"},
+        {c: "SET-35", r: "ऑफ-व्हाईट / क्रीम", d: "निळ्या धाग्यांचे पानांचे काम", f: "घेरावर आणि बाह्यांवर गडद निळ्या पानांचे मोठे आणि सुबक एम्ब्रॉयडरी वर्क.", id: "1WP_GZMnDh9fZq6k0NS7g1cLxSTurPBmE"},
+        {c: "SET-36", r: "फिकट आकाशी निळा", d: "फुलांचे नाजूक भरतकाम", f: "गळ्यावर आणि बाह्यांवर गडद गुलाबी फुलांचे सुंदर एम्ब्रॉयडरी व गोटा-पट्टी बॉर्डर.", id: "19Xajl-Hphypr3Vv3SJqRWgfSbwtdhnOo"},
+        {c: "SET-37", r: "फिकट राखाडी / सिल्व्हर", d: "मोर आणि फुलांचे जड भरतकाम", f: "गळ्यावर गुलाबी फुलासह मोराचे सुबक एम्ब्रॉयडरी आणि फेस्टिव्ह लूक.", id: "1HUBAebmn7Y60KDn4cKgQP_gYS3aBjkRX"},
+        {c: "SET-38", r: "पीच / सौम्य गुलाबी", d: "फुलांचे नाजूक भरतकाम", f: "गळ्यावर आणि बाह्यांवर गडद गुलाबी फुलांचे एम्ब्रॉयडरी वर्क व सिल्क कापड.", id: "1H0b8DMR2eSgSizkqQYPOaBZwklQvlQV5"},
+        {c: "SET-39", r: "मेटॅलिक सिल्व्हर / ग्रीन", d: "जड जरदोजी आणि मण्यांचे काम", f: "V-नेक आणि छातीवर सोनेरी धाग्यांचे व मण्यांचे गोलाकार जड भरतकाम.", id: "1tgLgT-pzmbb-hgkGNh4mqiFq0kvq0BhA"},
+        {c: "SET-40", r: "डार्क चॉकलेट / कॉफी", d: "जड जरदोजी आणि मण्यांचे काम", f: "गळ्यावर आणि छातीवर सोनेरी धाग्यांचे व मण्यांचे गोलाकार जड भरतकाम.", id: "17gTlL5UKLb4ng0JUV7zHLxxP6ObXmFTk"},
+        {c: "SET-41", r: "डार्क चॉकलेट / कॉफी", d: "क्रॉस-स्टिच एम्ब्रॉयडरी", f: "मध्यभागी गुलाबी आणि पिवळ्या फुलांचे क्रॉस-स्टिच एम्ब्रॉयडरी वर्क.", id: "1y7WXpwPyOIJ2bP2h3Ob40NOG-TMeCjsn"},
+        {c: "SET-42", r: "डार्क टील / निळा-हिरवा", d: "क्रॉस-स्टिच एम्ब्रॉयडरी", f: "मध्यभागी गुलाबी आणि पिवळ्या फुलांचे क्रॉस-स्टिच एम्ब्रॉयडरी. साबर लूक.", id: "1bEhYqgR9zhSZNRKFv3RZNy5rEwa_BU1_"},
+        {c: "SET-43", r: "गडद गुलाबी / रानी रंग (Magenta / Dark Pink)", d: "बारीक चुण्या आणि फुलांचे भरतकाम (Pleated & Embroidery)", f: "V' आकार गळा, गळ्याभोवती आणि छातीवर बारीक चुण्यांचे (Gathered) डिझाईन, बाह्यांवर पांढऱ्या धाग्यांचे फुलांचे एम्ब्रॉयडरी वर्क असलेला स्टायलिश लूक..", id: "1LOqNuv-qsnZ4QCaFjRpjMXlirSvd0zj-"},
+       { c: "SET-44", r: "तांबूस तपकिरी / कॉपर (Copper Brown)", d: "पांढऱ्या फुलांचे मोठे बुट्टे (Large Floral Embroidery)", f: "V' आकार गळा, सिल्क कापडाचा शाईनी लूक आणि संपूर्ण कुर्त्यावर पांढऱ्या धाग्यांनी व मण्यांनी विणलेली मोठी नाजूक फुले.", id: "1_ATAURceRXvBc1Ek6ptaod5dlGZuR85k" },
+{ c: "SET-45", r: "काळा (Black)", d: "पारंपारिक भरतकाम आणि आरसा काम (Ethnic Embroidery & Mirror Work)", f: "गोल गळा, छातीवर (Yoke) आणि बाह्यांवर रंगीत धाग्यांचे पारंपारिक नक्षीकाम व बारीक आरशांचे काम असलेला उठावदार लूक.", id: "1iVId71FCpJinurwh7Vx2MxvOn8qL749l" },
+{ c: "SET-46", r: "बदामी / बेज (Beige)", d: "फुलांचे आणि मोत्यांचे नाजूक भरतकाम (Floral & Pearl Embroidery)", f: "V' आकार गळा, गळ्यावर आणि बाह्यांवर गुलाबी लेस; कुर्त्यावर लाल व गुलाबी फुले आणि पांढऱ्या मोत्यांची सुंदर वेल (Floral Vine) असलेला मोहक लूक.", id: "1phUqfpDWzlROM8upTDfHzgK0qchQURT3" },
+{ c: "SET-47", r: "गडद लाल / मरून (Dark Red / Maroon)", d: "आरसा आणि धाग्यांचे काम (Mirror & Thread Work)", f: "गोल गळा, मध्यभागी आरशांचे फुलांचे डिझाईन; खांद्यावर आणि बाह्यांवर विशेष चुण्यांचे (Gathered) काम आणि आरशांची सुबक बॉर्डर असलेला फेस्टिव्ह लूक.", id: "1Aq8v4OmeskL1azXURqJCeiA_sE46EdG6" },
+{ c: "SET-48", r: "फिकट आकाशी निळा (Pastel Blue)", d: "फ्लोरल प्रिंट आणि आरसा काम (Floral Print & Mirror Work)", f: "V' आकार गळा, गळ्याभोवती आणि मध्यभागी आरशांची (Mirrors) सुंदर पट्टी; संपूर्ण कुर्त्यावर गडद निळ्या रंगाची फुलांची नाजूक प्रिंट असलेला फ्रेश लूक.", id: "17-9oRPjNrkq4FoSqhsbHbrPH7FIQ_ns_" },
+{ c: "SET-49", r: "लॅव्हेंडर / फिकट जांभळा (Lavender / Light Purple)", d: "निसर्गचित्र भरतकाम (Nature / Garden Embroidery)", f: "V' आकार गळा आणि त्यावर गोंडा (Tassel); कुर्त्याच्या खालच्या भागावर ( घेरावर) झाडे, फुले आणि गवताचे अतिशय सुंदर रंगीत एम्ब्रॉयडरी वर्क असलेला युनिक लूक.", id: "1L3Ih5Tejh7b2pvTa_LTjUFU5_SWYlZm7" },
+{ c: "SET-50", r: "पांढरा / ऑफ-व्हाईट (White / Off-white)", d: "अंगरखा स्टाईल फ्लोरल प्रिंट (Angrakha Style Floral Print)", f: "V' आकार गळा आणि अंगरखा पद्धतीचे ओव्हरलॅप डिझाईन; संपूर्ण ड्रेसवर गुलाबी आणि निळ्या फुलांची प्रिंट, गळ्यावर आरसा काम (Mirror work) आणि बाजूला गोंडे (Tassels) असलेला पारंपारिक लूक.", id: "1j8gNkZeNXco6wA1boYp2Dq69cQODUBZX" },
+{ c: "SET-52", r: "नेव्ही निळा (Navy Blue)", d: "रंगीत फुलांचे भरतकाम (Colorful Floral Embroidery)", f: "चौकोनी गळा, गळ्याभोवती आणि मध्यभागी नाजूक रंगीत फुलांचे एम्ब्रॉयडरी वर्क; बाह्यांवर मॅचिंग नक्षी आणि संपूर्ण कुर्त्यावर छोटे रंगीत बुट्टे असलेला क्लासी लूक.", id: "1bxoPtih3jRB_iKpHVMIIvgJU559makhR" },
+{ c: "SET-51", r: "पांढरा (White)", d: "जांभळ्या फुलांची प्रिंट आणि आरसा काम (Purple Floral Print & Mirror Work)", f: "V' आकार गळा, गळ्याभोवती जांभळ्या धाग्यांचे आणि आरशांचे (Mirror) सुबक नक्षीकाम; संपूर्ण कुर्त्यावर जांभळ्या रंगाचे मोठे बुट्टे असलेला फ्रेश लूक.", id: "1wpDjzvxD0BUlc3BLY-VO0aZCJk6nISte" },
+{ c: "SET-53", r: "फिकट गुलाबी (Baby Pink)", d: "झाडांच्या पानांची प्रिंट आणि आरसा काम (Tree Motif Print & Mirror Work)", f: "V' आकार गळा ज्यावर गुलाबी गोंडा (Tassel) आणि आरशांचे काम आहे; संपूर्ण कुर्त्यावर गडद गुलाबी रंगाची झाडांच्या पानांची आकर्षक प्रिंट असलेला मोहक लूक.", id: "1dq7qikSrFycNgzBsLrlneNGgni7oGwU3" },
+{ c: "SET-54", r: "पांढरा आणि काळा (White & Black)", d: "भौमितिक आणि पारंपारिक प्रिंट (Geometric & Ethnic Print)", f: "गोल गळा, संपूर्ण कुर्त्यावर उभ्या काळ्या रेषा (Stripes); छातीवर आणि बाह्यांवर लाल गोल बुट्टे असलेली प्रिंट; खालच्या बाजूला (घेरावर) गाय आणि झाडांची पारंपारिक वारली/पिच्छवाई स्टाईल नक्षी असलेला आकर्षक लूक.", id: "1s4n4BC_cpF4ZsPkyBHEE1MWdjk7jH-7S" },
+{ c: "SET-55", r: "गडद लाल / मरून (Dark Red / Maroon)", d: "रंगीत भौमितिक भरतकाम (Colorful Geometric Embroidery)", f: "V' आकार गळा, गळ्याभोवती आणि बाह्यांच्या काठावर सोनेरी जरदोजीसह रंगीत धाग्यांचे चौकोनी (Geometric) नक्षीकाम असलेला उठावदार लूक.", id: "1iHEh9MI0KQ4QH_EwAjngrNLVd712d8EW" },
+{ c: "SET-56", r: "मोहरी पिवळा / मस्टर्ड (Mustard Yellow)", d: "निसर्ग आणि प्राणी चित्र (Nature & Wildlife Print)", f: "गोल गळा, छातीवर आणि खालच्या घेरावर मोर, हत्ती, झाडे आणि महालाची अतिशय सुंदर रंगीत प्रिंट; गळ्यावर पिवळे गोंडे (Tassels) आणि बाह्यांवर मॅचिंग प्रिंट असलेला रॉयल लूक.", id: "1XmzakLVB8zycXMp4vE3qY7M96XuJMhg_" },
+{ c: "SET-57", r: "गडद लाल / मरून (Dark Red / Maroon)", d: "पक्षी आणि फुलांचे मोठे भरतकाम (Bird & Floral Embroidery)", f: "V' आकार गळा, गळ्यावर सोनेरी नक्षी; कुर्त्याच्या मध्यभागी फांदीवर बसलेले दोन मोठे रंगीत पक्षी आणि फुलांचे अतिशय सुंदर व जड एम्ब्रॉयडरी वर्क असलेला रॉयल लूक.", id: "1M6TW8q61wnH59i6_PtVejNZw0MUEew8e" },
+{ c: "SET-58", r: "गडद जांभळा (Dark Purple / Wine)", d: "जाळीदार काम आणि फुलांचे भरतकाम (Lace Work & Floral Embroidery)", f: "गोल गळा, कुर्त्यावर उभ्या रांगेत पांढऱ्या आणि गुलाबी धाग्यांचे फुलांचे एम्ब्रॉयडरी वर्क; बाह्यांवर आणि घेरावर पारदर्शक जाळीदार (Cut-work/Lace) डिझाईन असलेला फॅन्सी लूक.", id: "1JttkTW7bFXRwyTdfUsT3zeoTsBLF6FES" },
+{ c: "SET-59", r: "मस्टर्ड पिवळा / हिरवट छटा (Mustard Yellow / Lime Tint)", d: "फुलांचे नाजूक भरतकाम (Pastel Floral Embroidery)", f: "फोटो 6 (2): 'V' आकार गळा, ज्यावर गुलाबी, पांढऱ्या आणि पिवळ्या धाग्यांनी कमळाच्या फुलांचे अतिशय सुंदर एम्ब्रॉयडरी वर्क केले आहे.", id: "1Usuc74rwEo8udN19GRJlTc9eIQdGYV5L" },
+{ c: "SET-60", r: "गडद हिरवा / बॉटल ग्रीन (Bottle Green)", d: "आरसा आणि मण्यांचे नाजूक काम (Mirror & Bead Work)", f: "गोल गळा, गळ्याभोवती आरसे आणि पांढऱ्या मण्यांची सुबक पट्टी; संपूर्ण कुर्त्यावर छोटे मणी बुट्टे आणि सिल्क कापडाचा क्लासी लूक.", id: "1733CPOx0VRk2o5VYVGj0671llJ6I0p49" },
+{ c: "SET-61", r: "काळा (Black)", d: "दाट फ्लोरल प्रिंट आणि मणी काम (Dense Floral Print & Beadwork)", f: "गोल गळा, ज्यावर सोनेरी आणि चंदेरी मण्यांचे जड काम आहे; संपूर्ण कुर्त्यावर राखाडी आणि फिकट जांभळ्या रंगाची दाट फुलांची नक्षी आणि बारीक बुट्टे असलेला स्टायलिश लूक.", id: "1mNQQrJsqu1FcU-Nh0IFzUaoh3jnsAGT9" },
+{ c: "SET-62", r: "गुलाबी / राणी कलर (Bright Pink / Rani)", d: "जड विणकाम आणि आरसा काम (Heavy Embroidery & Mirror Work)", f: "गोल गळा, कुर्त्याच्या मध्यभागी फुलांची वेल आणि बाजूला चौकोनी (Geometric) नक्षी; घेरावर आणि बाह्यांवर रंगीत धाग्यांचे व आरशांचे अतिशय जड काम असलेला रॉयल लूक.", id: "1Aq2caril1ahe3_fNx6KTbe9CPnn280QP" },
+{ c: "SET-63", r: "पीच / फिकट गुलाबी (Peach / Light Pink)", d: "फ्लोरल प्रिंट आणि जड मणी काम (Floral Print & Heavy Beadwork)", f: "फोटो 10 (3): गोलाकार गळा, गळ्याभोवती आणि छातीवर सोनेरी मण्यांचे व जरदोजीचे जड काम; संपूर्ण कुर्त्यावर गुलाबी फुलांची डिजिटल प्रिंट.", id: "1MbJ_1a-eUqLfTbQC1PvqgwSdDF53CZ7W" },
+{ c: "SET-64", r: "मस्टर्ड पिवळा / हिरवट छटा (Mustard Yellow / Lime Tint)", d: "गळ्यावर मणी आणि रेशमी धाग्यांचे काम (Bead & Thread Embroidery)", f: "फोटो 11 (1): गोलाकार गळा, ज्यावर गुलाबी धाग्यांची नाजूक फुले आणि पांढऱ्या मण्यांचे सुबक नक्षीकाम आहे; संपूर्ण कुर्त्यावर पांढऱ्या मण्यांचे छोटे बुट्टे आणि सिल्क कापडाचा शाईनी लूक.", id: "1IPLok9jupUvwP47M4fk3UjMEhUn1LJKU" },
+{ c: "SET-65", r: "पांढरा / क्रीम (White / Cream)", d: "लाल आणि गुलाबी फ्लोरल प्रिंट (Red & Pink Floral Print)", f: "फोटो 12 (1): गोल गळा, ज्यावर पांढऱ्या धाग्यांची आणि मण्यांची सुबक पट्टी आहे; संपूर्ण क्रीम रंगाच्या कुर्त्यावर लाल आणि गुलाबी फुलांचे मोठे बुट्टे असलेला स्टायलिश लूक.", id: "1tUzkY1dpGb5XTtlcMkfGM6kaEOTEG4ZX" },
+{ c: "SET-66", r: "राखाडी जांभळा / डस्टी रोझ (Dusty Rose / Mauve)", d: "रंगीत फुलांचे भरतकाम (Colorful Floral Embroidery)", f: "फोटो 13 (2): गोलाकार गळा, गळ्यावर आणि छातीवर अतिशय सुबक रंगीत रेशमी धाग्यांचे फुलांचे विणकाम; संपूर्ण कुर्त्यावर छोटी फुले आणि सिल्क कापडाचा शाईनी लूक.", id: "1dXehh_20oT7vjs5evn1eKKBXsRl-XwyD" },
+{ c: "SET-67", r: "मल्टिकलर / तपकिरी आणि निळा (Brown & Blue)", d: "भौमितिक पट्टे आणि मोठी फुले (Stripes & Large Floral Print)", f: "फोटो 14 (1): 'V' आकार गळा ज्यावर सोनेरी मण्यांचे आणि टिकल्यांचे जड काम आहे; कुर्त्यावर एका बाजूला उभे पट्टे आणि खाली मोठ्या पिवळसर फुलांची डिजिटल प्रिंट असलेला आधुनिक लूक.", id: "1RtGXvJLuPMpiJaLr8B7xs5N_Rj9Kwa1p" },
+{ c: "SET-68", r: "गुलाबी (Pink)", d: "मोरपंखी निळी फुले आणि सोनेरी गोटा-पट्टी (Teal Floral & Gold Gota-Patti)", f: "फोटो 15 (1): 'V' आकार गळा, गळ्यावर आणि बाह्यांवर सोनेरी गोटा-पट्टीचे जड नक्षीकाम; संपूर्ण गुलाबी कुर्त्यावर मोरपंखी निळ्या / टील ब्लू रंगाची मोठी फुले आणि सोनेरी बुट्टे असलेला फेस्टिव्ह लूक.", id: "1MmqGBNQ63RohJh3u7Rs44W62O6Tv1opu" },
+{ c: "SET-69", r: "ऑफ-व्हाईट / क्रीम (Off-white / Cream)", d: "जॅकेट स्टाईल आणि रंगीत फुलांचे भरतकाम (Jacket Style & Floral Embroidery)", f: "फोटो 16 (4): लांब ड्रेस ज्यावर सुंदर फ्लोरल एम्ब्रॉयडरी असलेले छोटे जॅकेट आहे; जॅकेटवर गुलाबी, पिवळ्या आणि निळ्या धाग्यांचे जड विणकाम असून ड्रेसच्या खालच्या बोर्डरला मॅचिंग फ्लोरल पट्टी आहे.", id: "1hv5PVa7xKbrZlfl59KLqFpCFzwIjIVHD" },
+{ c: "SET-70", r: "गडद गुलाबी / राणी कलर (Dark Pink / Rani)", d: "सोनेरी कमळाचे बुट्टे (Golden Lotus Motifs)", f: "फोटो 17 (1): 'V' आकार गळा, गळ्यावर आणि बाह्यांच्या काठावर नाजूक सोनेरी लेस; संपूर्ण कुर्त्यावर सोनेरी रंगाची मोठी विणलेली कमळाची फुले (Lotus print/embroidery) असलेला उठावदार लूक.", id: "1pbhsroEtmHTyYYzsLja15xFhDCm3yfaG" },
+{ c: "SET-71", r: "mustard yellow", d: "This mustard yellow kurta features a V-neckline decorated with mirror work and a floral print at the hem", f: "This mustard yellow kurta features a V-neckline decorated with mirror work and a floral print at the hem", id: "1dVKM0mnheLlPnqdezOhYku79xtw64MCK" },
+{ c: "SET-72", r: "Royal Rani Pink", d: "Rani Pink (Magenta) Silk Kurta Set featuring heavy gold and white embroidery on the neckline and a matching dupatta with small embroidered motifs.", f: "Rani Pink (Magenta) Silk Kurta Set featuring heavy gold and white embroidery on the neckline and a matching dupatta with small embroidered motifs.", id: "15FtSNOLJJiyqpSn_OmreNakvBL-pAOw5" },
+{ c: "SET-73", r: "maroon/wine", d: "Pakistani-style printed kurti, specifically featuring traditional paisley and ethnic motifs and delicate mirror work", f: "Pakistani-style printed kurti, specifically featuring traditional paisley and ethnic motifs and delicate mirror work", id: "1qIj57T8q6U3avUXUBqm63SUPskBo2jpF" },
+{ c: "SET-74", r: "off-white", d: "This off-white straight kurta features a bold, watercolor-style pink floral print with green and yellow accents", f: "It is distinguished by intricate mirror-work embroidery along the V-neckline and a delicate white lace trim at the hem and sleeve cuffs.", id: "1uCdNEaUWyJlr1thOpVoso5HJP_V5Vvq_" },
+
+    ];
+
+
+    function loadCards(data) {
+        const grid = document.getElementById('mainGrid');
+        grid.innerHTML = "";
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            const imgSrc = `https://drive.google.com/thumbnail?id=${item.id}&sz=w1000`;
+            
+            card.innerHTML = `
+                <img src="${imgSrc}" alt="${item.c}" onerror="this.src='https://via.placeholder.com/320x450?text=फोटो+उपलब्ध+नाही'">
+                <div class="info">
+                    <div class="code">${item.c}</div>
+                    <div class="details"><strong>रंग:</strong> ${item.r} | <strong>डिझाईन:</strong> ${item.d}</div>
+                    <div class="feature-box">"${item.f}"</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function searchFn() {
+        let val = document.getElementById('search').value.toUpperCase();
+        let filtered = inventory.filter(x => x.c.includes(val));
+        loadCards(filtered);
+    }
+
+    window.onload = () => loadCards(inventory);
+</script>
+
+</body>
+</html>
